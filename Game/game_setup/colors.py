@@ -1,0 +1,8 @@
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GREY_Gainsboro = (220, 220, 220)
+GREY_Dark = (169, 169, 169)
+GREY = (128, 128, 128)
+list_color = (253, 243, 182)
+red_line_color = (227, 154, 171)
+line_color = (144, 183, 224)
