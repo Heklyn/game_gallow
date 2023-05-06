@@ -1,6 +1,6 @@
 import pygame as pg
 from Game.states.game_states import Event_type
-from Game.keyboard.key_input import get_letter
+from Game.help_func.key_input import get_letter
 
 
 def event(surf: pg.Surface, buttons: list, text_input: bool = False):

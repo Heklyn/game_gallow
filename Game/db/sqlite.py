@@ -7,13 +7,14 @@ def db_start():
     db = sq.connect('bot_db.db')
     cur = db.cursor()
 
-    cur.execute("CREATE TABLE IF NOT EXISTS Words(word_id INTEGER PRIMARY KEY, word TEXT, word_len INTEGER")
+    cur.execute("CREATE TABLE IF NOT EXISTS Words(word_id INTEGER PRIMARY KEY, word TEXT, word_len INTEGER)")
     db.commit()
 
 
 def create_word(word: str):
-    cur.execute("INSERT INTO Checks VALUES(?, ?, ?)",
+    cur.execute("INSERT INTO Words VALUES(?, ?, ?)",
                 (None, word, len(word)))
+    db.commit()
 
 
 def get_word(word_id: int):

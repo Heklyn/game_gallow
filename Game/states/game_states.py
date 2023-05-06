@@ -40,3 +40,18 @@ class Playing_type(Enum):
     with_fixed_length = 1
     play_with_given_word = 2
 
+
+class File_code(Enum):
+    Not_exist = 0
+    Ok = 1
+
+
+class Word_code(Enum):
+    Not_get = 0
+    Ok = 1
+
+
+class Game_result(Enum):
+    Lose = 0
+    Win = 1
+

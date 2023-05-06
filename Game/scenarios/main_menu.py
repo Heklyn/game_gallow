@@ -18,7 +18,7 @@ def create_screen_detail():
 
     buttons = []
 
-    button_texts = ['Быстрая игра', 'Определенаня длина', 'Задать слово', 'Добавить в бд', "Выход"]
+    button_texts = ['Быстрая игра', 'Определенная длина', 'Задать слово', 'Добавить в бд', "Выход"]
     button_states = [Button_data.fast_play, Button_data.play_with_fixed_length,
                      Button_data.play_with_given_word, Button_data.add_word_to_db,
                      Button_data.exit_game]
@@ -36,7 +36,6 @@ def play():
     new_game_state = game_loop()
     if new_game_state == Game_scenarios.playing:
         return Game_scenarios.playing, Playing_type.fast_play
-
     return new_game_state, None
 
 
@@ -70,4 +69,4 @@ def game_loop():
                 raise Exception('Wrond button_callback_data')
             return new_game_state
 
-        pygame.display.flip()
+        pg.display.flip()

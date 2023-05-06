@@ -1,5 +1,5 @@
 from Game.game_setup.game_create import get_clock, get_screen
-from Game.game_setup.config_reader import number_of_cells_in_weight
+from Game.game_setup import config_reader
 
 
 def get_center():
@@ -10,9 +10,9 @@ def get_center():
 
 
 def get_background_info():
-    num_x = number_of_cells_in_weight
-    side_len = round(get_screen().get_size()[0] / num_x)
-    num_y = round(get_screen().get_size()[1] / side_len)
+    num_x = config_reader.number_of_cells_in_weight
+    side_len = get_screen().get_size()[0] // num_x
+    num_y = get_screen().get_size()[1] // side_len
     info = {
         'num_x': num_x,
         'num_y': num_y,
@@ -32,50 +32,103 @@ def get_logo_info():
     return logo_info
 
 
-def get_main_menu_button_masks():
-    background_info = get_background_info()
+def get_button_sizes():
+    screen_size = get_screen().get_size()
+    button_width = config_reader.button_width * screen_size[0]
+    button_height = config_reader.button_height * screen_size[1]
+    gap = config_reader.gap * screen_size[0]
+    button_width_small = (button_width - gap) // 2
 
-    gap = round((background_info['num_y'] - 9) * background_info['side_len'] / 4)
+    return button_width, button_width_small, button_height, gap
 
-    button_height = gap * 3 / 4
-    button_width = 8 * background_info["side_len"]
 
-    start_width = 11 * background_info['side_len']
-    start_height = 5.5 * background_info['side_len']
+def get_start_pos_button(lower: bool = False):
+    button_width, gap = get_button_sizes()[::2]
+    screen_size = get_screen().get_size()
+    start_width = screen_size[0] // 2 - button_width // 2 - 3
+    if lower:
+        start_height = screen_size[1] * 0.62
+    else:
+        start_height = screen_size[1] * 0.35
 
+    return start_width, start_height
+
+
+def create_button_masks(start_pos: tuple, list_button_count: tuple):
+    button_width, button_width_small, button_height, gap = get_button_sizes()
     button_masks = []
-    for i in range(5):
-        button_masks.append({
-            'size': (button_width, button_height),
-            'coord': (start_width, start_height + i * gap)
+    for line, count in enumerate(list_button_count):
+        if count == 1:
+            button_masks.append({
+                'size': (button_width, button_height),
+                'coord': (start_pos[0], start_pos[1] + line * button_height + line * gap)
 
-        })
+            })
+        if count == 2:
+            button_masks.append({
+                'size': (button_width_small, button_height),
+                'coord': (start_pos[0], start_pos[1] + line * button_height + line * gap)
+            })
+            button_masks.append({
+                'size': (button_width_small, button_height),
+                'coord': (start_pos[0] + button_width // 2 + gap // 2, start_pos[1] + line * button_height + line * gap)
+            })
+
+    return button_masks
+
+
+def get_main_menu_button_masks():
+    start_width, start_height = get_start_pos_button()
+
+    button_masks = create_button_masks(
+        start_pos=(start_width, start_height),
+        list_button_count=(1, 1, 1, 1, 1)
+    )
 
     return button_masks
 
 
 def get_append_words_button_mask():
-    background_info = get_background_info()
+    start_pos = get_start_pos_button(lower=True)
 
-    gap = round((background_info['num_y'] - 9) * background_info['side_len'] / 4)
+    button_masks = create_button_masks(
+        start_pos=start_pos,
+        list_button_count=(2, 1)
+    )
 
-    button_height = gap * 3 / 4
-    button_width = 12 * background_info["side_len"]
-
-    start_width = 9 * background_info['side_len']
-    start_height = 8.5 * background_info['side_len']
-
-    button_masks = [{
-        'size': ((button_width - gap) // 2, button_height),
-        'coord': (start_width, start_height)
-    },
-        {
-        'size': ((button_width - gap) // 2, button_height),
-        'coord': (start_width + button_width + gap, start_height)
-    },
-        {
-        'size': (button_width, button_height),
-        'coord': (start_width, start_height + button_height + gap)
-    }]
     return button_masks
+
+
+def get_choose_word_len_button_mask():
+    start_pos = get_start_pos_button(lower=True)
+
+    button_masks = create_button_masks(
+        start_pos=start_pos,
+        list_button_count=(1, 2, 1)
+    )
+
+    return button_masks
+
+
+def get_enter_word_button_mask():
+    start_pos = get_start_pos_button(lower=True)
+
+    button_masks = create_button_masks(
+        start_pos=start_pos,
+        list_button_count=(1, 1)
+    )
+
+    return button_masks
+
+
+def get_playing_button_mask():
+    start_pos = get_start_pos_button(lower=True)
+
+    button_masks = create_button_masks(
+        start_pos=start_pos,
+        list_button_count=(1, )
+    )
+
+    return button_masks
+
 
