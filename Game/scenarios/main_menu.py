@@ -1,5 +1,4 @@
-import pygame.display
-
+from Game.graphic_elements.stats import add_stats
 from Game.game_setup.game_create import get_screen, get_clock
 from Game.game_setup.config_reader import fps
 from Game.graphic_elements.button import Static_button
@@ -15,7 +14,7 @@ def create_screen_detail():
     surf = create_background()
     logo, logo_coord = create_logo()
     surf.blit(logo, logo_coord)
-
+    add_stats(surf)
     buttons = []
 
     button_texts = ['Быстрая игра', 'Определенная длина', 'Задать слово', 'Добавить в бд', "Выход"]
@@ -45,6 +44,7 @@ def game_loop():
 
     surf, buttons = create_screen_detail()
     screen.blit(surf, (0, 0))
+
 
     running = True
     while running:

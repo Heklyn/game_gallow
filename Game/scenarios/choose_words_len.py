@@ -1,6 +1,6 @@
 from Game.game_setup.game_create import get_screen, get_clock
 from Game.game_setup.get_info import get_choose_word_len_button_mask
-from Game.help_func.word_draw import word_center
+from Game.graphic_elements.word_draw import word_center
 from Game.graphic_elements.background import create_background
 from Game.graphic_elements.button import Static_button
 from Game.graphic_elements.logo import create_logo
@@ -8,13 +8,13 @@ from Game.states.game_states import Button_type, Button_data, Event_type, Game_s
 from Game.game_setup.config_reader import fps
 from Game.scenarios.get_event import event
 from Game.game_setup.config_reader import max_word_len, min_word_len
-from Game.help_func.error_draw import error_upper_right_corner, get_error_text
+from Game.graphic_elements.error_draw import error_upper_right_corner, get_error_text
 import pygame as pg
 
 
 def play():
-    game_loop()
-    return Game_scenarios.main_menu, None
+    new_game_state, word_len = game_loop()
+    return new_game_state, word_len
 
 
 def create_screen_detail():

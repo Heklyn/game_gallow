@@ -1,21 +1,27 @@
 from Game.game_setup.game_create import get_screen, get_clock
 from Game.game_setup.colors import GREEN, BLACK
 from Game.game_setup.get_info import get_playing_button_mask
-from Game.help_func.word_draw import playing_word_surf
+from Game.graphic_elements.word_draw import playing_word_surf
 from Game.graphic_elements.background import create_background
 from Game.graphic_elements.button import Static_button
 from Game.graphic_elements.logo import create_logo
-from Game.states.game_states import Button_type, Button_data, Event_type, Game_scenarios, Game_result
-from Game.game_setup.config_reader import fps
+from Game.states.game_states import Button_type, Button_data, Event_type, Game_scenarios, Game_result, Playing_type
+from Game.game_setup.config_reader import fps, update_score
 from Game.scenarios.get_event import event
 
-from Game.help_func.error_draw import error_upper_right_corner, get_error_text, error_bottom_left_corner
+
+from Game.graphic_elements.error_draw import error_upper_right_corner, get_error_text, error_bottom_left_corner
 import pygame as pg
 
 
-def play():
-    game_loop(word_true='АДАТАР')
-    return Game_scenarios.main_menu
+def play(word: str):
+    new_game_state, game_result = game_loop(word_true=word)
+    if game_result == Game_result.Win:
+        update_score(is_win=True)
+    elif game_result == Game_result.Lose:
+        update_score(is_win=False)
+
+    return new_game_state
 
 
 def create_screen_detail():
@@ -51,11 +57,10 @@ def game_loop(word_true: str):
     current_word = '*' * len(word_true)
     log = []
 
-    message_yes = get_error_text("Вы отгадали\n букву", color=GREEN, prescription=False)
+    message_yes = get_error_text("Вы отгадали букву", color=GREEN, prescription=False)
     message_no = get_error_text("Вы не отгадали букву", prescription=False)
     error_repeat = get_error_text("Вы уже пробовали эту букву", prescription=False)
     current_message = None
-
 
     running = True
     while True:
