@@ -16,9 +16,9 @@ class Txt_reader:
 
     def get_word(self):
         try:
-            word = self.file.readline()[:-1]
+            word = self.file.readline()[:-1].upper()
             while not is_word_correct(word):
-                word = self.file.readline()[:-1]
+                word = self.file.readline()[:-1].upper()
                 if not word:
                     raise Exception
         except Exception:

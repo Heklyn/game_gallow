@@ -2,19 +2,24 @@ from Game.graphic_elements.stats import add_stats
 from Game.game_setup.game_create import get_screen, get_clock
 from Game.game_setup.config_reader import fps
 from Game.graphic_elements.button import Static_button
-from Game.graphic_elements.logo import create_logo
-from Game.game_setup.get_info import get_main_menu_button_masks
+from Game.game_setup.get_info import get_main_menu_button_masks, get_main_menu_gallow_mask
 from Game.graphic_elements.background import create_background
 from Game.states.game_states import Button_data, Button_type, Game_scenarios, Event_type, Playing_type
 from Game.scenarios.get_event import event
+from Game.graphic_elements.gallow import Gallow
 import pygame as pg
 
 
 def create_screen_detail():
     surf = create_background()
-    logo, logo_coord = create_logo()
-    surf.blit(logo, logo_coord)
+
     add_stats(surf)
+
+    for gallow_info in get_main_menu_gallow_mask():
+        gallow = Gallow(screen=surf, pos=gallow_info["pos"], scale=gallow_info["scale"])
+        gallow.max_state()
+        gallow.draw()
+
     buttons = []
 
     button_texts = ['Быстрая игра', 'Определенная длина', 'Задать слово', 'Добавить в бд', "Выход"]
@@ -46,6 +51,7 @@ def game_loop():
     screen.blit(surf, (0, 0))
 
 
+
     running = True
     while running:
         clock.tick(fps)
@@ -66,7 +72,7 @@ def game_loop():
             elif event_data == Button_data.add_word_to_db:
                 new_game_state = Game_scenarios.append_words
             else:
-                raise Exception('Wrond button_callback_data')
+                raise Exception('Wrong button_callback_data')
             return new_game_state
 
         pg.display.flip()

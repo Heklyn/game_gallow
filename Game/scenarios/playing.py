@@ -1,13 +1,14 @@
 from Game.game_setup.game_create import get_screen, get_clock
-from Game.game_setup.colors import GREEN, BLACK
+from Game.game_setup.colors import GREEN, BLACK, win_color, lose_color
 from Game.game_setup.get_info import get_playing_button_mask
 from Game.graphic_elements.word_draw import playing_word_surf
 from Game.graphic_elements.background import create_background
 from Game.graphic_elements.button import Static_button
-from Game.graphic_elements.logo import create_logo
-from Game.states.game_states import Button_type, Button_data, Event_type, Game_scenarios, Game_result, Playing_type
+from Game.states.game_states import Button_type, Button_data, Event_type, Game_scenarios, Game_result, Allow_input
 from Game.game_setup.config_reader import fps, update_score
 from Game.scenarios.get_event import event
+from Game.graphic_elements.gallow import Gallow
+from Game.game_setup.get_info import get_playing_gallow_mask
 
 
 from Game.graphic_elements.error_draw import error_upper_right_corner, get_error_text, error_bottom_left_corner
@@ -26,8 +27,6 @@ def play(word: str):
 
 def create_screen_detail():
     surf = create_background()
-    logo, logo_coord = create_logo()
-    surf.blit(logo, logo_coord)
 
     buttons = []
 
@@ -53,6 +52,9 @@ def game_loop(word_true: str):
     surf, buttons = create_screen_detail()
     screen.blit(surf, (0, 0))
 
+    gallow_info = get_playing_gallow_mask()
+    gallow = Gallow(screen=screen, pos=gallow_info["pos"], scale=gallow_info["scale"])
+
     word_dict = word_parse(word_text=word_true)
     current_word = '*' * len(word_true)
     log = []
@@ -60,12 +62,19 @@ def game_loop(word_true: str):
     message_yes = get_error_text("Вы отгадали букву", color=GREEN, prescription=False)
     message_no = get_error_text("Вы не отгадали букву", prescription=False)
     error_repeat = get_error_text("Вы уже пробовали эту букву", prescription=False)
+    message_win = get_error_text(f"Вы выиграли, слово: {word_true}", color=GREEN, prescription=False)
+    message_lose = get_error_text(f"Вы проиграли, слово: {word_true}", prescription=False)
     current_message = None
+
+    game_result = Game_result.Lose
+    is_allow_input = Allow_input.Yes
 
     running = True
     while True:
         clock.tick(fps)
         screen.blit(surf, (0, 0))
+
+        gallow.draw()
 
         playing_word_surf(screen, current_word)
         log_text = get_error_text(f'Log: {", ".join(log)}', color=BLACK, prescription=False)
@@ -74,11 +83,9 @@ def game_loop(word_true: str):
         if current_message:
             error_upper_right_corner(screen, current_message)
 
-        if health == 0:
-            return Game_scenarios.main_menu, Game_result.Lose
 
-        if not current_word.count('*'):
-            return Game_scenarios.main_menu, Game_result.Win
+
+
 
         event_type, event_data = event(surf=screen, buttons=buttons, text_input=True)
 
@@ -86,8 +93,8 @@ def game_loop(word_true: str):
             return Game_scenarios.exit_game, Game_result.Lose
         if event_type == Button_type.Scenario:
             if event_data == Button_data.return_menu:
-                return Game_scenarios.main_menu, Game_result.Lose
-        if event_type == Event_type.Key_press:
+                return Game_scenarios.main_menu, game_result
+        if event_type == Event_type.Key_press and is_allow_input == Allow_input.Yes:
             if event_data in log:
                 current_message = error_repeat
             else:
@@ -101,6 +108,19 @@ def game_loop(word_true: str):
                     else:
                         current_message = message_no
                         health -= 1
+                        gallow.next_state()
+
+                    if health == 0:
+                        is_allow_input = Allow_input.No
+                        surf = create_background(current_color=lose_color)
+                        current_message = message_lose
+
+                    if not current_word.count('*'):
+                        game_result = Game_result.Win
+                        is_allow_input = Allow_input.No
+                        surf = create_background(current_color=win_color)
+                        current_message = message_win
+
                     log.append(event_data)
 
         pg.display.flip()

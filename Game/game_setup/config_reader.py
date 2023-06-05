@@ -35,7 +35,6 @@ def create_system_config():
 
 
 if not os.path.exists('config.ini'):
-    print('fg')
     create_user_config()
 if not os.path.exists('Game/game_setup/system_config.ini'):
     create_system_config()

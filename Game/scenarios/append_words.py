@@ -4,7 +4,6 @@ from Game.db import sqlite
 from Game.graphic_elements.word_draw import word_center
 from Game.graphic_elements.background import create_background
 from Game.graphic_elements.button import Static_button
-from Game.graphic_elements.logo import create_logo
 from Game.states.game_states import Button_type, Button_data, Event_type, Game_scenarios, File_code, Word_code
 from Game.game_setup.config_reader import fps
 from Game.scenarios.get_event import event
@@ -19,8 +18,6 @@ def play():
 
 def create_screen_detail():
     surf = create_background()
-    logo, logo_coord = create_logo()
-    surf.blit(logo, logo_coord)
 
     file = Txt_reader(file_name='words.txt')
     status = file.open_file()

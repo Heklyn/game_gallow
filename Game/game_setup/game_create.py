@@ -19,8 +19,8 @@ def get_clock():
     return clock
 
 
-def get_middle():
-    return screen.get_size()
+# def get_middle():
+#     return screen.get_size()
 
 
 def close_game():

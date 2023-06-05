@@ -1,14 +1,15 @@
 from Game.game_setup.get_info import get_background_info
 from Game.game_setup.game_create import get_screen
 from Game.game_setup.colors import line_color, list_color, red_line_color
+from Game.graphic_elements.logo import create_logo
 import pygame as pg
 
 
-def create_background():
+def create_background(current_color=list_color):
     size = get_screen().get_size()
     background_surf = pg.Surface(size=size)
 
-    background_surf.fill(list_color)
+    background_surf.fill(current_color)
 
     background_info = get_background_info()
 
@@ -28,5 +29,8 @@ def create_background():
                  start_pos=(round(background_info['side_len'] * 2.5), 0),
                  end_pos=(round(background_info['side_len'] * 2.5), size[1]),
                  width=3)
+
+    logo, logo_coord = create_logo()
+    background_surf.blit(logo, logo_coord)
 
     return background_surf

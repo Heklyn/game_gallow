@@ -132,3 +132,28 @@ def get_playing_button_mask():
     return button_masks
 
 
+def get_main_menu_gallow_mask():
+    screen_size = get_screen().get_size()
+
+    info = [{
+        "pos": (screen_size[0] * 0.73, screen_size[1] * 0.32),
+        "scale": 3,
+    }, {
+        "pos": (screen_size[0] * 0.065, screen_size[1] * 0.266),
+        "scale": 2.2,
+    }]
+
+    return info
+
+
+def get_playing_gallow_mask():
+    screen_size = get_screen().get_size()
+
+    info = {
+        "pos": (screen_size[0] * 0.79, screen_size[1] * 0.52),
+        "scale": 2.5,
+    }
+
+    return info
+
+
