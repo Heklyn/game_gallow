@@ -32,7 +32,7 @@ def create_screen_detail():
     for mask, text, callback_data, button_type in zip(button_masks, button_texts, button_states, buttons_types):
         buttons.append(Static_button(width=mask["size"][0], height=mask["size"][1],
                                      text=text, coords=mask["coord"], callback_data=callback_data,
-                                     type=button_type))
+                                     button_type=button_type))
     text_error = None
     if status == File_code.Not_exist:
         text_error = get_error_text(text='Файл со словами не найден')
@@ -86,5 +86,3 @@ def game_loop():
             flag_next = True
 
         pg.display.flip()
-
-

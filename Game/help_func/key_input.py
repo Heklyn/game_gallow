@@ -5,7 +5,7 @@ letters = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i',
            'g', 'h', 'j', 'k', 'l', ';', "'", 'z',
            'x', 'c', 'v', 'b', 'n', 'm', ',', '.',
            'backspace'
-]
+           ]
 
 russian_letters = ['Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш',
                    'Щ', 'З', 'Х', 'Ъ', 'Ф', 'Ы', 'В', 'А',
@@ -18,6 +18,13 @@ def is_accept_symbol(letter: str):
     if letter in letters:
         return True
     return False
+
+
+def is_russian_word(word: str):
+    for letter in word:
+        if letter not in russian_letters[:-1]:
+            return False
+    return True
 
 
 def get_letter(symbol_code: int):

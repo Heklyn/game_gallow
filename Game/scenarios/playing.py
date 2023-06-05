@@ -38,7 +38,7 @@ def create_screen_detail():
     for mask, text, callback_data, button_type in zip(button_masks, button_texts, button_states, buttons_types):
         buttons.append(Static_button(width=mask["size"][0], height=mask["size"][1],
                                      text=text, coords=mask["coord"], callback_data=callback_data,
-                                     type=button_type))
+                                     button_type=button_type))
 
     return surf, buttons
 
@@ -83,18 +83,14 @@ def game_loop(word_true: str):
         if current_message:
             error_upper_right_corner(screen, current_message)
 
-
-
-
-
-        event_type, event_data = event(surf=screen, buttons=buttons, text_input=True)
+        event_type, event_data = event(surf=screen, buttons=buttons, text_input=is_allow_input)
 
         if event_type == Event_type.Quit:
             return Game_scenarios.exit_game, Game_result.Lose
         if event_type == Button_type.Scenario:
             if event_data == Button_data.return_menu:
                 return Game_scenarios.main_menu, game_result
-        if event_type == Event_type.Key_press and is_allow_input == Allow_input.Yes:
+        if event_type == Event_type.Key_press:
             if event_data in log:
                 current_message = error_repeat
             else:

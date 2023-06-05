@@ -24,8 +24,10 @@ def word_center(surf: pg.surface.Surface, word_text: str):
 
 
 def playing_word_surf(surface: pg.Surface, word_text: str):
+
     screen_size = get_screen().get_size()
     letter_surfs = [surf_text(letter) for letter in word_text]
+
     max_height = max([surf.get_size()[1] for surf in letter_surfs]) + 10
     all_width = sum([surf.get_size()[0] for surf in letter_surfs]) + gap * (len(word_text) - 1) * screen_size[0]
 

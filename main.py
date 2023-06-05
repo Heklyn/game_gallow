@@ -5,18 +5,24 @@ from Game.db.sqlite import get_word_with_fixed_length, get_word
 
 start_game()
 state = Game_scenarios.main_menu
+current_error = None
 
 
 while state != Game_scenarios.exit_game:
     if state == Game_scenarios.main_menu:
-        state, game_type = main_menu.play()
+        state, game_type = main_menu.play(current_error)
+        current_error = None
 
     elif state == Game_scenarios.playing:
-        if game_type == Playing_type.fast_play:
-            word = get_word()
-        elif game_type == Playing_type.with_fixed_length:
-            word = get_word_with_fixed_length(word_len=word_len)
-        state = playing.play(word=word)
+        try:
+            if game_type == Playing_type.fast_play:
+                word = get_word()
+            elif game_type == Playing_type.with_fixed_length:
+                word = get_word_with_fixed_length(word_len=word_len)
+            state = playing.play(word=word)
+        except TypeError:
+            state = Game_scenarios.main_menu
+            current_error = "В базе данных нет слов такой длины!"
 
     elif state == Game_scenarios.enter_word:
         state, word = enter_word.play()
@@ -33,7 +39,3 @@ while state != Game_scenarios.exit_game:
 
 
 close_game()
-
-
-
-

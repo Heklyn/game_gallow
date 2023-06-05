@@ -1,14 +1,14 @@
 import pygame as pg
-from Game.game_setup.colors import GREY_Gainsboro, GREY, GREY_Dark, WHITE, BLACK
+from Game.game_setup.colors import GREY_Gainsboro, GREY, GREY_Dark, BLACK
 from Game.graphic_elements.border import create_board
 from Game.states.game_states import Button_type
 
 
-class Static_button():
+class Static_button:
     def __init__(self, width: int, height: int, text: str, coords: tuple, callback_data, font_size: int = 40,
                  font_color: tuple = BLACK, border_width: int = -1, border_width_hover_coef: float = 0.5,
                  border_color: tuple = BLACK, line_width: int = 1, color_normal: tuple = GREY_Gainsboro,
-                 color_hover: tuple = GREY_Dark, color_off: tuple = GREY, type: Button_type = None):
+                 color_hover: tuple = GREY_Dark, color_off: tuple = GREY, button_type: Button_type = None):
         self.width = width
         self.height = height
         self.text = text
@@ -29,13 +29,13 @@ class Static_button():
         self.enabled = True
         self.rect = [[coords[0], coords[0] + width], [coords[1], coords[1] + height]]
         self.border_color = border_color
-        self.type = type
+        self.button_type = button_type
 
         self.surf1 = self.create_surf(border_width=self.border_width, color=self.color_normal)
         self.surf2 = self.create_surf(border_width=self.border_width_hover, color=self.color_hover)
         self.surf3 = self.create_surf(border_width=self.border_width, color=self.color_off)
 
-    def update(self, screen, mouse_pos):
+    def draw(self, screen, mouse_pos):
         if self.enabled:
             if self.collidepoint(mouse_pos):
                 screen.blit(self.surf2, self.coords)

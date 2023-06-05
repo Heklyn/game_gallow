@@ -68,4 +68,3 @@ class Game_result(Enum):
 class Allow_input(Enum):
     No = 0
     Yes = 1
-

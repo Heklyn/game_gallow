@@ -1,4 +1,4 @@
-from Game.game_setup.game_create import get_clock, get_screen
+from Game.game_setup.game_create import get_screen
 from Game.game_setup import config_reader
 
 
@@ -126,7 +126,7 @@ def get_playing_button_mask():
 
     button_masks = create_button_masks(
         start_pos=start_pos,
-        list_button_count=(1, )
+        list_button_count=(1,)
     )
 
     return button_masks
@@ -155,5 +155,3 @@ def get_playing_gallow_mask():
     }
 
     return info
-
-
