@@ -49,10 +49,6 @@ def game_loop():
     surf, buttons, error_text, file = create_screen_detail()
     screen.blit(surf, (0, 0))
 
-    if error_text:
-        error_bottom_right_corner(surf, error_text)
-
-    error_text = get_error_text("В файле закончились слова")
     flag_next = True
     current_word = ''
 
@@ -61,12 +57,15 @@ def game_loop():
         clock.tick(fps)
         screen.blit(surf, (0, 0))
 
-        if flag_next:
+        if error_text:
+            error_bottom_right_corner(screen, error_text)
+
+        if flag_next and not error_text:
             status, word = file.get_word()
             if status == Word_code.Not_get:
                 buttons[0].disable()
                 buttons[1].disable()
-                error_bottom_right_corner(surf, error_text)
+                error_text = get_error_text("В файле закончились слова")
             else:
                 current_word = word.upper()
             flag_next = False
