@@ -14,15 +14,23 @@ while state != Game_scenarios.exit_game:
         current_error = None
 
     elif state == Game_scenarios.playing:
-        try:
+
             if game_type == Playing_type.fast_play:
-                word = get_word()
+                try:
+                    word = get_word()
+                except TypeError:
+                    state = Game_scenarios.main_menu
+                    current_error = "В базе данных нет слов"
+                    continue
             elif game_type == Playing_type.with_fixed_length:
-                word = get_word_with_fixed_length(word_len=word_len)
+                try:
+                    word = get_word_with_fixed_length(word_len=word_len)
+                except TypeError:
+                    state = Game_scenarios.main_menu
+                    current_error = "В базе данных нет слов такой длины!"
+                    continue
             state = playing.play(word=word)
-        except TypeError:
-            state = Game_scenarios.main_menu
-            current_error = "В базе данных нет слов такой длины!"
+
 
     elif state == Game_scenarios.enter_word:
         state, word = enter_word.play()
