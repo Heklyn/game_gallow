@@ -11,6 +11,10 @@ def db_start():
     db.commit()
 
 
+def db_exit():
+    db.close()
+
+
 def create_word(word: str):
     cur.execute("INSERT INTO Words VALUES(?, ?, ?)",
                 (None, word, len(word)))

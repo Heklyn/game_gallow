@@ -5,10 +5,17 @@ from Game.graphic_elements.button import Static_button
 from Game.game_setup.get_info import get_main_menu_button_masks, get_main_menu_gallow_mask
 from Game.graphic_elements.background import create_background
 from Game.states.game_states import Button_data, Button_type, Game_scenarios, Event_type, Playing_type
-from Game.scenarios.get_event import event
+from Game.scenarios.get_event import game_event
 from Game.graphic_elements.gallow import Gallow
 from Game.graphic_elements.error_draw import get_error_text, error_upper_right_corner
 import pygame as pg
+
+
+def play(current_error):
+    new_game_state = game_loop(current_error)
+    if new_game_state == Game_scenarios.playing:
+        return Game_scenarios.playing, Playing_type.fast_play
+    return new_game_state, None
 
 
 def create_screen_detail(current_error):
@@ -41,13 +48,6 @@ def create_screen_detail(current_error):
     return surf, buttons
 
 
-def play(current_error):
-    new_game_state = game_loop(current_error)
-    if new_game_state == Game_scenarios.playing:
-        return Game_scenarios.playing, Playing_type.fast_play
-    return new_game_state, None
-
-
 def game_loop(current_error):
     screen = get_screen()
     clock = get_clock()
@@ -59,7 +59,7 @@ def game_loop(current_error):
         clock.tick(fps)
         screen.blit(surf, (0, 0))
 
-        event_type, event_data = event(surf=screen, buttons=buttons)
+        event_type, event_data = game_event(surf=screen, buttons=buttons)
         if event_type == Event_type.Quit:
             return Game_scenarios.exit_game
         if event_type == Button_type.Scenario:

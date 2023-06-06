@@ -6,14 +6,14 @@ from Game.graphic_elements.background import create_background
 from Game.graphic_elements.button import Static_button
 from Game.states.game_states import Button_type, Button_data, Event_type, Game_scenarios, File_code, Word_code
 from Game.game_setup.config_reader import fps
-from Game.scenarios.get_event import event
+from Game.scenarios.get_event import game_event
 from Game.help_func.file_reader import Txt_reader
 from Game.graphic_elements.error_draw import error_bottom_right_corner, get_error_text
 import pygame as pg
 
 
 def play():
-    return game_loop(), None
+    return game_loop()
 
 
 def create_screen_detail():
@@ -72,7 +72,7 @@ def game_loop():
 
         word_center(screen, current_word)
 
-        event_type, event_data = event(surf=screen, buttons=buttons)
+        event_type, event_data = game_event(surf=screen, buttons=buttons)
 
         if event_type == Event_type.Quit:
             return Game_scenarios.exit_game

@@ -6,7 +6,7 @@ from Game.graphic_elements.background import create_background
 from Game.graphic_elements.button import Static_button
 from Game.states.game_states import Button_type, Button_data, Event_type, Game_scenarios, Game_result, Allow_input
 from Game.game_setup.config_reader import fps, update_score
-from Game.scenarios.get_event import event
+from Game.scenarios.get_event import game_event
 from Game.graphic_elements.gallow import Gallow
 from Game.game_setup.get_info import get_playing_gallow_mask
 
@@ -47,7 +47,7 @@ def game_loop(word_true: str):
     screen = get_screen()
     clock = get_clock()
 
-    health = 5
+    health = 6
 
     surf, buttons = create_screen_detail()
     screen.blit(surf, (0, 0))
@@ -83,10 +83,10 @@ def game_loop(word_true: str):
         if current_message:
             error_upper_right_corner(screen, current_message)
 
-        event_type, event_data = event(surf=screen, buttons=buttons, text_input=is_allow_input)
+        event_type, event_data = game_event(surf=screen, buttons=buttons, text_input=is_allow_input)
 
         if event_type == Event_type.Quit:
-            return Game_scenarios.exit_game, Game_result.Lose
+            return Game_scenarios.exit_game, game_result
         if event_type == Button_type.Scenario:
             if event_data == Button_data.return_menu:
                 return Game_scenarios.main_menu, game_result

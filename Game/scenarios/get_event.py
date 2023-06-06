@@ -3,7 +3,7 @@ from Game.states.game_states import Event_type, Allow_input
 from Game.help_func.key_input import get_letter
 
 
-def event(surf: pg.Surface, buttons: list, text_input: Allow_input = Allow_input.No):
+def game_event(surf: pg.Surface, buttons: list, text_input: Allow_input = Allow_input.No):
     mouse_pos = pg.mouse.get_pos()
     for button in buttons:
         button.draw(surf, mouse_pos)

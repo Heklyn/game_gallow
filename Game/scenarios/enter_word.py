@@ -5,7 +5,7 @@ from Game.graphic_elements.background import create_background
 from Game.graphic_elements.button import Static_button
 from Game.states.game_states import Button_type, Button_data, Event_type, Game_scenarios, Allow_input
 from Game.game_setup.config_reader import fps
-from Game.scenarios.get_event import event
+from Game.scenarios.get_event import game_event
 from Game.game_setup.config_reader import max_word_len, min_word_len
 from Game.graphic_elements.error_draw import error_upper_right_corner, get_error_text
 from Game.db.sqlite import is_word_in_db, create_word
@@ -63,7 +63,7 @@ def game_loop():
 
         word_center(screen, f"Ваше слово: {word}")
 
-        event_type, event_data = event(surf=screen, buttons=buttons, text_input=Allow_input.Yes)
+        event_type, event_data = game_event(surf=screen, buttons=buttons, text_input=Allow_input.Yes)
 
         if event_type == Event_type.Quit:
             return Game_scenarios.exit_game, None
@@ -80,7 +80,8 @@ def game_loop():
                 if len(word) > 0:
                     word = word[:-1]
             else:
-                word += event_data
+                if len(word) < max_word_len + 5:
+                    word += event_data
 
             if len(word) < min_word_len:
                 current_error = error_no_less

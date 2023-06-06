@@ -35,7 +35,7 @@ while state != Game_scenarios.exit_game:
             game_type = Playing_type.with_fixed_length
 
     elif state == Game_scenarios.append_words:
-        state, game_type = append_words.play()
+        state = append_words.play()
 
 
 close_game()

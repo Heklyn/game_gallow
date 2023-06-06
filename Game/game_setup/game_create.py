@@ -1,5 +1,5 @@
 import pygame as pg
-from Game.db.sqlite import db_start
+from Game.db.sqlite import db_start, db_exit
 
 
 def start_game():
@@ -21,3 +21,4 @@ def get_clock():
 
 def close_game():
     pg.quit()
+    db_exit()

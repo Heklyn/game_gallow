@@ -4,7 +4,7 @@ from Game.game_setup.game_create import get_screen
 from Game.game_setup.colors import tree_color, body_color, rope_color
 
 construction_info = {
-    "max_state": 3,
+    "max_state": 0,
     "width_scale": 0.1,
     "height_scale": 0.13,
 }
@@ -16,7 +16,7 @@ gallow_info = {
 }
 
 man_info = {
-    "max_state": 4,
+    "max_state": 6,
     "body_dim": ((0.325, 0.35), (0.35, 0.4)),
     "head_dim": ((0.4, 0.21), (0.2, 0.15)),
     "hand_len": 0.6,
@@ -60,9 +60,7 @@ class Gallow(Base_draw):
 
     def next_state(self):
         super().next_state()
-        self.construction.next_state()
-        if self.state >= 3:
-            self.man.next_state()
+        self.man.next_state()
 
     def draw(self):
         self.construction.draw()
@@ -78,26 +76,21 @@ class Construction(Base_draw):
         self.state = construction_info["max_state"]
 
     def draw(self):
-        if self.state == 1:
-            self.draw_state_one()
-        elif self.state == 2:
-            self.draw_state_two()
-        elif self.state >= 3:
-            self.draw_state_three()
+        self.draw_part_one()
+        self.draw_part_two()
+        self.draw_part_three()
 
-    def draw_state_one(self):
+    def draw_part_one(self):
         pg.draw.line(self.screen, tree_color, start_pos=self.pos,
                      end_pos=(self.pos[0], self.pos[1] + self.dimensions[1]),
                      width=10)
 
-    def draw_state_two(self):
-        self.draw_state_one()
+    def draw_part_two(self):
         pg.draw.line(self.screen, tree_color, start_pos=self.pos,
                      end_pos=(self.pos[0] + self.dimensions[0], self.pos[1]),
                      width=10)
 
-    def draw_state_three(self):
-        self.draw_state_two()
+    def draw_part_three(self):
         pg.draw.line(self.screen, tree_color,
                      start_pos=(self.pos[0] + self.dimensions[0] * construction_info["width_scale"], self.pos[1]),
                      end_pos=(self.pos[0], self.pos[1] + self.dimensions[1] * construction_info["height_scale"]),
@@ -106,8 +99,8 @@ class Construction(Base_draw):
 
 class Man(Base_draw):
     def __init__(self, screen, pos, dimensions):
-        self.dimensions = dimensions
         super().__init__(screen, pos)
+        self.dimensions = dimensions
 
     def max_state(self):
         self.state = man_info["max_state"]
@@ -120,24 +113,25 @@ class Man(Base_draw):
         elif self.state >= 3:
             self.draw_state_three()
 
-    def draw_state_one(self):
+    def draw_state_two(self):
         pg.draw.ellipse(self.screen, body_color,
                         (self.pos[0] + self.dimensions[0] * man_info["body_dim"][0][0],
                          self.pos[1] + self.dimensions[1] * man_info["body_dim"][0][1],
                          self.dimensions[0] * man_info["body_dim"][1][0],
                          self.dimensions[1] * man_info["body_dim"][1][1]))
-
-    def draw_state_two(self):
         self.draw_state_one()
-        for x_coord in [0, self.dimensions[0]]:
-            for y_coord in [0, self.dimensions[1]]:
-                self.draw_hand(end_point=(
+
+    def get_end_positions(self):
+        positions = []
+        for y_coord in [0, self.dimensions[1]]:
+            for x_coord in [0, self.dimensions[0]]:
+                positions.append((
                     self.pos[0] + x_coord,
                     self.pos[1] + y_coord
                 ))
+        return positions
 
-    def draw_state_three(self):
-        self.draw_state_two()
+    def draw_state_one(self):
         pg.draw.ellipse(self.screen, body_color,
                         (self.pos[0] + self.dimensions[0] * man_info["head_dim"][0][0],
                          self.pos[1] + self.dimensions[1] * man_info["head_dim"][0][1],
@@ -157,13 +151,18 @@ class Man(Base_draw):
                               self.pos[1] + man_info["rope_dim"][0][1] * self.dimensions[1]),
                      width=6)
 
-    def draw_hand(self, end_point):
+    def draw_state_three(self):
+        self.draw_state_two()
+        for i in range(self.state - 2):
+            self.draw_hand(end_pos=self.get_end_positions()[i])
+
+    def draw_hand(self, end_pos):
 
         middle_pos = (self.pos[0] + self.dimensions[0] / 2,
                       self.pos[1] + self.dimensions[1]
                       * (man_info["body_dim"][0][1] + man_info["body_dim"][1][1] / 2))
 
         pg.draw.line(self.screen, body_color, start_pos=middle_pos,
-                     end_pos=(middle_pos[0] + (end_point[0] - middle_pos[0]) * man_info["hand_len"],
-                              middle_pos[1] + (end_point[1] - middle_pos[1]) * man_info["hand_len"] * 0.9),
+                     end_pos=(middle_pos[0] + (end_pos[0] - middle_pos[0]) * man_info["hand_len"],
+                              middle_pos[1] + (end_pos[1] - middle_pos[1]) * man_info["hand_len"] * 0.9),
                      width=10)

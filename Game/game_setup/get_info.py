@@ -54,10 +54,10 @@ def get_start_pos_button(lower: bool = False):
     return start_width, start_height
 
 
-def create_button_masks(start_pos: tuple, list_button_count: tuple):
+def create_button_masks(start_pos: tuple, button_list: tuple):
     button_width, button_width_small, button_height, gap = get_button_sizes()
     button_masks = []
-    for line, count in enumerate(list_button_count):
+    for line, count in enumerate(button_list):
         if count == 1:
             button_masks.append({
                 'size': (button_width, button_height),
@@ -82,7 +82,7 @@ def get_main_menu_button_masks():
 
     button_masks = create_button_masks(
         start_pos=(start_width, start_height),
-        list_button_count=(1, 1, 1, 1, 1)
+        button_list=(1, 1, 1, 1, 1)
     )
 
     return button_masks
@@ -93,7 +93,7 @@ def get_append_words_button_mask():
 
     button_masks = create_button_masks(
         start_pos=start_pos,
-        list_button_count=(2, 1)
+        button_list=(2, 1)
     )
 
     return button_masks
@@ -104,7 +104,7 @@ def get_choose_word_len_button_mask():
 
     button_masks = create_button_masks(
         start_pos=start_pos,
-        list_button_count=(1, 2, 1)
+        button_list=(1, 2, 1)
     )
 
     return button_masks
@@ -115,7 +115,7 @@ def get_enter_word_button_mask():
 
     button_masks = create_button_masks(
         start_pos=start_pos,
-        list_button_count=(1, 1)
+        button_list=(1, 1)
     )
 
     return button_masks
@@ -126,7 +126,7 @@ def get_playing_button_mask():
 
     button_masks = create_button_masks(
         start_pos=start_pos,
-        list_button_count=(1,)
+        button_list=(1,)
     )
 
     return button_masks
